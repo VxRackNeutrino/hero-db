@@ -11,6 +11,7 @@
 ** --   --------   -------   ------------------------------------
 ** 1    09/19/2016 PBM       Created
 ** 2    10/04/2016 PBM       Updated with Stored Procedure Generator
+** 3    10/19/2016 PBM		 Updated to account for the bot tables
 *******************************/
 
 

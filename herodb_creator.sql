@@ -11,6 +11,7 @@
 ** --   --------   -------   ------------------------------------
 ** 1    09/19/2016 PBM       Created
 ** 2    10/04/2016 PBM		 Updated Create statement and required fields
+** 3    10/19/2016 PBM		 Create tables for Bots and Neutrino
 *******************************/
 
 # Creating the TitanDB
@@ -77,6 +78,7 @@ CREATE TABLE `worldeventtype` (
   PRIMARY KEY (`idworldeventtype_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table contains the types of world events. It is used for tracking the events';
 
+# Creates types of world events.
 INSERT INTO `titandb`.`worldeventtype` (`type_text`) VALUES ("Combat");
 INSERT INTO `titandb`.`worldeventtype` (`type_text`) VALUES ("Level");
 INSERT INTO `titandb`.`worldeventtype` (`type_text`) VALUES ("Goodsend");
@@ -95,7 +97,6 @@ CREATE TABLE `worldevent` (
   PRIMARY KEY (`worldevent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='WorldEvent table contains the events happening in the world ';
 
-
 CREATE TABLE `heroworldevent` (
 
   `heroworldevent_id` 	int(11) NOT NULL AUTO_INCREMENT,
@@ -110,7 +111,6 @@ CREATE TABLE `heroworldevent` (
   CONSTRAINT `heroworldevent_worldevent_worldevent_id_fk` FOREIGN KEY (`worldevent_id`) REFERENCES `worldevent` (`worldevent_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='HeroWorldEvent is a Junction table that maps heros to world events ';
-
 
 CREATE TABLE `bothero` (
 
@@ -443,7 +443,7 @@ END;
 END$$
 DELIMITER ;
 
-# Stored Procedures
+
 DROP PROCEDURE IF EXISTS bot_hero_insert;
 
 DELIMITER $$
