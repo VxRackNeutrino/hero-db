@@ -16,16 +16,19 @@
 
 DELETE FROM  heroworldevent;
 DELETE FROM  hero;
+DELETE FROM  bothero;
 DELETE FROM  worldeventtype;
 DELETE FROM  worldevent;
 
 ALTER TABLE hero AUTO_INCREMENT = 1;
+ALTER TABLE bothero AUTO_INCREMENT = 1;
 ALTER TABLE heroworldevent AUTO_INCREMENT = 1;
 ALTER TABLE worldeventtype AUTO_INCREMENT = 1;
 ALTER TABLE worldevent AUTO_INCREMENT = 1;
 
 # Change the number in the procedure to N heros
 Call create_heros(10);
+Call create_bot_heros(10);
 
 SELECT * FROM hero;
-SELECT * FROM item;
+SELECT * FROM bothero;

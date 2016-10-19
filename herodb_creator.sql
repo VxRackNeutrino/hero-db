@@ -25,13 +25,15 @@ USE titandb;
 # Drop Tables
 DROP TABLE IF EXISTS heroworldevent;
 DROP TABLE IF EXISTS hero;
+DROP TABLE IF EXISTS bothero;
 DROP TABLE IF EXISTS worldeventtype;
 DROP TABLE IF EXISTS worldevent;
+DROP TABLE IF EXISTS heroneutrinoaccounts;
 
 #Drop Functions
 DROP FUNCTION IF EXISTS randomizer;
 
-# Tables
+# Tables   ------------------------------------------------------------------------
 CREATE TABLE `hero` (
 
   `hero_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -110,7 +112,53 @@ CREATE TABLE `heroworldevent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='HeroWorldEvent is a Junction table that maps heros to world events ';
 
 
-# Functions
+CREATE TABLE `bothero` (
+
+  `hero_id` int(11) NOT NULL AUTO_INCREMENT,
+  `hero_name` varchar(255) DEFAULT NULL,
+  `player_name` varchar(255) DEFAULT NULL,
+  `player_lastname` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `twitter` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `race` varchar(255) DEFAULT NULL,
+  `isAdmin` tinyint(1) DEFAULT NULL,
+  `hero_level` int(11) DEFAULT NULL,
+  `hclass` varchar(255) DEFAULT NULL,
+  `ttl` int(11) DEFAULT NULL,
+  `userhost` varchar(255) DEFAULT NULL,
+  `hero_online` tinyint(1) DEFAULT NULL,
+  `xpos` int(11) DEFAULT NULL,
+  `ypos` int(11) DEFAULT NULL,
+  `next_level` datetime DEFAULT NULL,
+  `weapon` int(11) DEFAULT NULL,
+  `tunic` int(11) DEFAULT NULL,
+  `shield` int(11) DEFAULT NULL,
+  `leggings` int(11) DEFAULT NULL,
+  `ring` int(11) DEFAULT NULL,
+  `gloves` int(11) DEFAULT NULL,
+  `boots` int(11) DEFAULT NULL,
+  `helm` int(11) DEFAULT NULL,
+  `charm` int(11) DEFAULT NULL,
+  `amulet` int(11) DEFAULT NULL,
+  `total_equipment` int(11) DEFAULT NULL,
+  `hero_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`hero_id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Contains the Bots Hero information';
+
+CREATE TABLE `heroneutrinoaccounts` (
+  `heroaccount` varchar(8) NOT NULL,
+  `herousername` varchar(8) NOT NULL,
+  `heropassword` varchar(8) NOT NULL,
+  `used` int(1) NOT NULL
+  
+ ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table contains the neutrino hero auto generated accounts';
+
+
+# Functions  ------------------------------------------------------------------------
 
 DROP FUNCTION IF EXISTS randomizer;
 
@@ -123,7 +171,6 @@ CREATE DEFINER=`titanuser`@`%` FUNCTION `randomizer`(
     DETERMINISTIC
 RETURN floor(pmin+RAND()*(pmax-pmin))$$
 DELIMITER ;
-
 
 DROP function if exists generate_fname;
 
@@ -142,8 +189,6 @@ BEGIN
   RETURN ELT(FLOOR(1 + (RAND() * (100-1))), "Smith","Johnson","Williams","Jones","Brown","Davis","Miller","Wilson","Moore","Taylor","Anderson","Thomas","Jackson","White","Harris","Martin","Thompson","Garcia","Martinez","Robinson","Clark","Rodriguez","Lewis","Lee","Walker","Hall","Allen","Young","Hernandez","King","Wright","Lopez","Hill","Scott","Green","Adams","Baker","Gonzalez","Nelson","Carter","Mitchell","Perez","Roberts","Turner","Phillips","Campbell","Parker","Evans","Edwards","Collins","Stewart","Sanchez","Morris","Rogers","Reed","Cook","Morgan","Bell","Murphy","Bailey","Rivera","Cooper","Richardson","Cox","Howard","Ward","Torres","Peterson","Gray","Ramirez","James","Watson","Brooks","Kelly","Sanders","Price","Bennett","Wood","Barnes","Ross","Henderson","Coleman","Jenkins","Perry","Powell","Long","Patterson","Hughes","Flores","Washington","Butler","Simmons","Foster","Gonzales","Bryant","Alexander","Russell","Griffin","Diaz","Hayes");
 END$$
 DELIMITER ;
-
-
 
 DROP function if exists generate_race;
 DELIMITER $$
@@ -262,8 +307,9 @@ END$$
 DELIMITER ;
 
 
+# Stored Procedures     ------------------------------------------------------------------------
 
-# Stored Procedures
+
 DROP PROCEDURE IF EXISTS hero_insert;
 
 DELIMITER $$
@@ -386,6 +432,140 @@ BEGIN
     WHILE count < heronum DO
 
       call hero_insert();
+
+      SET count=(count + 1);
+
+    END WHILE;
+
+END;
+
+
+END$$
+DELIMITER ;
+
+# Stored Procedures
+DROP PROCEDURE IF EXISTS bot_hero_insert;
+
+DELIMITER $$
+CREATE DEFINER=`titanuser`@`%` PROCEDURE `bot_hero_insert`()
+BEGIN
+
+  #Set Hero Variables
+
+  SET @hero_name = (SELECT CONCAT(generate_fname(),' ', generate_lname()) as hero_name);
+  SET @player_name = (generate_fname());
+  SET @player_lastname = "BOT-O-Matic";
+  SET @email = (CONCAT(@player_name, '.', @player_lastname, randomizer(1,1000000),'@dell.com'));
+  SET @twitter = (CONCAT('@', @player_name, '.', @player_lastname));
+  SET @token = (SELECT UUID());
+  SET @userpass = (SELECT UUID());
+  SET @hero_level = (randomizer(1,5));
+  SET @next_level_calc = (SELECT ROUND(600*(POW(1.16, @hero_level+1))) AS Level_Time);
+  SET @next_level_calc2 = (SEC_TO_TIME((SELECT ROUND(600*(POW(1.16, @hero_level))) AS Level_Time)));
+  SET @next_level  = (SELECT ADDTIME(NOW(), @next_level_calc2));
+
+#SELECT @hero_level, @next_level_calc, @next_level_calc2, (Now()), @next_level;
+
+
+INSERT INTO `titandb`.`bothero`
+(
+  `hero_name`,
+  `player_name`,
+  `player_lastname`,
+  `token`,
+  `twitter`,
+  `email`,
+  `title`,
+  `race`,
+  `isAdmin`,
+  `hero_level`,
+  `hclass`,
+  `ttl`,
+  `userhost`,
+  `hero_online`,
+  `xpos`,
+  `ypos`,
+  `next_level`,
+	weapon,
+    tunic,
+    shield,
+    leggings,
+    ring,
+    gloves,
+    boots,
+    helm,
+    charm,
+    amulet,
+    total_equipment
+)
+
+VALUES
+
+(
+  @hero_name,
+  @player_name,
+  @player_lastname,
+  @token,
+  @twitter,
+  @email,
+  generate_title(),
+  generate_race(),
+  0,
+  @hero_level,
+  generate_class(),
+  @next_level_calc,
+  0,
+  1,
+  randomizer(1,2),
+  randomizer(1,2),
+  @next_level,
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  randomizer(1,2),
+  0
+  
+);
+
+SET @heroid = NULL;
+SET @total_items = NULL;
+
+# Getting HeroID to build up the Item and Penalty tables
+
+SET @heroid = (SELECT hero_id FROM bothero WHERE token = @token);
+
+
+# Calculate Total Items for Gandalf
+SET @total_items = (SELECT  weapon + tunic + shield + leggings + ring + gloves + boots + helm + charm + Amulet FROM bothero WHERE hero_id = @heroid);
+
+UPDATE bothero SET total_equipment = @total_items WHERE hero_id = @heroid;
+
+
+
+END$$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS create_bot_heros;
+
+DELIMITER $$
+CREATE DEFINER=`titanuser`@`%` PROCEDURE `create_bot_heros`(IN heronum INT)
+BEGIN
+
+    DECLARE count INT;
+  SET count=0;
+
+  BEGIN
+
+    WHILE count < heronum DO
+
+      call bot_hero_insert();
 
       SET count=(count + 1);
 
