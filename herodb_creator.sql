@@ -105,10 +105,10 @@ CREATE TABLE `heroworldevent` (
 
   PRIMARY KEY (`id`),
   KEY `heroworldevent_hero_hero_id_fk` (`hero_id`),
-  KEY `heroworldevent_worldevent_worldevent_id_fk` (`id`),
+  KEY `heroworldevent_worldevent_worldevent_id_fk` (`worldevent_id`),
 
-  CONSTRAINT `heroworldevent_hero_hero_id_fk` FOREIGN KEY (`id`) REFERENCES `hero` (`id`),
-  CONSTRAINT `heroworldevent_worldevent_worldevent_id_fk` FOREIGN KEY (`id`) REFERENCES `worldevent` (`id`)
+  CONSTRAINT `heroworldevent_hero_hero_id_fk` FOREIGN KEY (`hero_id`) REFERENCES `hero` (`id`),
+  CONSTRAINT `heroworldevent_worldevent_worldevent_id_fk` FOREIGN KEY (`worldevent_id`) REFERENCES `worldevent` (`id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='HeroWorldEvent is a Junction table that maps heros to world events ';
 
