@@ -69,7 +69,7 @@ CREATE TABLE `hero` (
   `hero_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`hero_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-  
+
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Contains the Hero information';
 
 CREATE TABLE `worldeventtype` (
@@ -146,7 +146,7 @@ CREATE TABLE `bothero` (
   `hero_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`hero_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-  
+
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Contains the Bots Hero information';
 
 CREATE TABLE `heroneutrinoaccounts` (
@@ -154,7 +154,7 @@ CREATE TABLE `heroneutrinoaccounts` (
   `herousername` varchar(8) NOT NULL,
   `heropassword` varchar(8) NOT NULL,
   `used` int(1) NOT NULL
-  
+
  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='This table contains the neutrino hero auto generated accounts';
 
 
@@ -352,7 +352,7 @@ INSERT INTO `titandb`.`hero`
   `xpos`,
   `ypos`,
   `next_level`,
-	weapon,
+  weapon,
     tunic,
     shield,
     leggings,
@@ -396,7 +396,7 @@ VALUES
   randomizer(1,2),
   randomizer(1,2),
   0
-  
+
 );
 
 SET @heroid = NULL;
@@ -486,7 +486,7 @@ INSERT INTO `titandb`.`bothero`
   `xpos`,
   `ypos`,
   `next_level`,
-	weapon,
+  weapon,
     tunic,
     shield,
     leggings,
@@ -530,7 +530,7 @@ VALUES
   randomizer(1,2),
   randomizer(1,2),
   0
-  
+
 );
 
 SET @heroid = NULL;
@@ -1580,7 +1580,3 @@ INSERT INTO heroneutrinoaccounts(heroaccount,herousername,heropassword,used) val
 INSERT INTO heroneutrinoaccounts(heroaccount,herousername,heropassword,used) values('hero_997','hero_997','qGc63NE9',0);
 INSERT INTO heroneutrinoaccounts(heroaccount,herousername,heropassword,used) values('hero_998','hero_998','Owwbywo1',0);
 INSERT INTO heroneutrinoaccounts(heroaccount,herousername,heropassword,used) values('hero_999','hero_999','j3lQbtWs',0);
-
-
-
-
